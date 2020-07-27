@@ -6,6 +6,7 @@ import signal
 import threading
 import requests
 import sys
+from config import config
 
 class PM_Daemon:
 	"""
@@ -13,25 +14,25 @@ class PM_Daemon:
 	10秒おきにサーバーにリクエストの状態を問い合わせ、それに応じてスリープに入れる
 	"""
 	def __init__(self):
-		self.delay = 10 #十秒後にスリープに入るってこと
+		self.delay = config.delay #十秒後にスリープに入るってこと
 	def sleeping(self):
 		#スタンバイ状態にする
 		time.sleep(self.delay)
-		requests.get("http://127.0.0.1:8080/setState/1")
+		requests.get(config.serverURL + "/setState/1")
 		Application.SetSuspendState(PowerState.Suspend, False, False)
 	def daemon(self):
 		while True:
 			try:
-				r = requests.get("http://127.0.0.1:8080/getState")
+				r = requests.get(config.serverURL + "/getState")
 				print(r.text)
 				if int(r.text) == 0:
 					self.sleeping()
 				elif int(r.text) == 2:
-					requests.get("http://127.0.0.1:8080/setState/3")
+					requests.get(config.serverURL + "/setState/3")
 			except requests.ConnectionError:
 				print("requests.ConnectionError")
 			finally:
-				time.sleep(10)
+				time.sleep(config.interval)
 
 
 if __name__ == "__main__":
