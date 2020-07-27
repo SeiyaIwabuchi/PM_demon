@@ -3,10 +3,10 @@
 import time
 import subprocess
 import signal
-import threading
 import requests
 import sys
 from config import config
+import os
 
 class PM_Daemon:
 	"""
@@ -15,6 +15,7 @@ class PM_Daemon:
 	"""
 	def __init__(self):
 		self.delay = config.delay #十秒後にスリープに入るってこと
+		requests.get(config.serverURL + "/setState/3")
 	def sleeping(self):
 		#スタンバイ状態にする
 		time.sleep(self.delay)
@@ -25,7 +26,7 @@ class PM_Daemon:
 			try:
 				r = requests.get(config.serverURL + "/getState")
 				print(r.text)
-				if int(r.text) == 0:
+				if int(r.text) == 0 or int(r.text) == 1:
 					self.sleeping()
 				elif int(r.text) == 2:
 					requests.get(config.serverURL + "/setState/3")
@@ -37,7 +38,7 @@ class PM_Daemon:
 
 if __name__ == "__main__":
 	if sys.argv[1] == "server" or sys.argv[1] == "debug":
-		server = subprocess.Popen(["python","module1.py"],shell=True)
+		server = subprocess.Popen(["python","module1.py"],shell=False)
 	if sys.argv[1] == "client" or sys.argv[1] == "debug":
 		import clr
 		clr.AddReference("System.Windows.Forms")
@@ -48,7 +49,7 @@ if __name__ == "__main__":
 			while True:
 				pass
 		else:
-			d.daemon()
+				d.daemon()
 	finally:
 		if  sys.argv[1] == "server" or sys.argv[1] == "debug":
 			server.send_signal(signal.CTRL_C_EVENT)

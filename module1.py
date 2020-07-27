@@ -46,10 +46,14 @@ def send_magic_packet(addr):
 def deamon():
 	while True:
 		if state == 2:
+			print("send_magic_packet")
 			try:
 				send_magic_packet(config.mac)
 			except:
 				print_exc()
+		time.sleep(config.minterval)
 
 if __name__ == "__main__":
-    app.run(debug=config.debug,host=config.host,port=config.port)
+	d = threading.Thread(target=deamon)
+	d.start()
+	app.run(debug=config.debug,host=config.host,port=config.port)
