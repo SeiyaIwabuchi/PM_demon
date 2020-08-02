@@ -1,4 +1,3 @@
-import subprocess
-import signal
-
-ps = subprocess.Popen(["python","PM_demon.py","client"],shell=True)
+from PM_demon import PM_Daemon
+d = PM_Daemon()
+d.daemon()

@@ -7,6 +7,7 @@ import requests
 import sys
 from config import config
 import os
+import threading
 
 class PM_Daemon:
 	"""
@@ -37,19 +38,19 @@ class PM_Daemon:
 
 
 if __name__ == "__main__":
-	if sys.argv[1] == "server" or sys.argv[1] == "debug":
+	if len(sys.argv) >= 2 and (sys.argv[1] == "server" or sys.argv[1] == "debug"):
 		server = subprocess.Popen(["python","module1.py"],shell=False)
-	if sys.argv[1] == "client" or sys.argv[1] == "debug":
+	if len(sys.argv) < 2 or sys.argv[1] == "client" or sys.argv[1] == "debug":
 		import clr
 		clr.AddReference("System.Windows.Forms")
 		from System.Windows.Forms import Application,PowerState
 		d = PM_Daemon()
 	try:
-		if  sys.argv[1] == "server":
+		if  len(sys.argv) >= 2 and sys.argv[1] == "server":
 			while True:
 				pass
 		else:
-				d.daemon()
+			d.daemon()
 	finally:
-		if  sys.argv[1] == "server" or sys.argv[1] == "debug":
+		if  len(sys.argv) >= 2 and (sys.argv[1] == "server" or sys.argv[1] == "debug"):
 			server.send_signal(signal.CTRL_C_EVENT)
