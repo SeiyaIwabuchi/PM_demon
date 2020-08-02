@@ -48,7 +48,7 @@ if __name__ == "__main__":
 	try:
 		if  len(sys.argv) >= 2 and sys.argv[1] == "server":
 			while True:
-				pass
+				time.sleep(config.interval)
 		else:
 			d.daemon()
 	finally:
