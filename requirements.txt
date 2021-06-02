@@ -15,5 +15,5 @@ pythonnet==2.5.1
 pywin32==228
 requests==2.24.0
 setuptools==41.2.0
-urllib3==1.25.10
+urllib3==1.26.5
 Werkzeug==1.0.1
