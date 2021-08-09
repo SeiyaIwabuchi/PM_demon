@@ -12,7 +12,7 @@ pip==19.2.3
 pycparser==2.20
 python-daemon==2.2.4
 pythonnet==2.5.1
-pywin32==228
+pywin32==301
 requests==2.24.0
 setuptools==41.2.0
 urllib3==1.26.5
